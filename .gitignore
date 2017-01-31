@@ -4,6 +4,11 @@ npm-debug.log
 /style
 /src/config
 
+# Firebase
+
+.firebaserc
+database.rules.json
+firebase.json
 
 # IntelliJ
 *.iml
