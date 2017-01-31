@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import MainPage from './MainPage';
 import * as firebase from 'firebase';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import configuration from '../config/config';
+
+import '../sass/form.sass';
 
 firebase.initializeApp(configuration);
 
@@ -57,10 +62,11 @@ export default class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState({
-      wait: true
+      wait: true,
+      error: ''
     });
     firebase.auth().signInWithEmailAndPassword(this.state.login, this.state.password)
-      .then(response => {
+      .then(() => {
         // console.log('Response: ', response);
         this.setState({
           error: '',
@@ -79,36 +85,38 @@ export default class Login extends Component {
   }
 
   render() {
-    if (this.state.wait) {
-      return (
-        <div>
-          Wait...
-        </div>
-      );
-    }
-    else if (this.state.logged) {
+    if (this.state.logged) {
       return (
         <MainPage myLogout={this.logout}/>
       );
     }
     else {
       return (
-        <div>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              E-mail
-              <input type="text" onChange={this.getLogin}/>
-            </label>
-            <label>
-              Password
-              <input type="password" onChange={this.getPassword}/>
-            </label>
-            <label>
-              <input type="submit" value="OK"/>
-            </label>
-          </form>
+        <form className="login-form">
+          <TextField
+            hintText="Enter your e-mail"
+            floatingLabelText="E-mail"
+            onChange={this.getLogin}
+          />
+          <br />
+          <TextField
+            hintText="Enter your password"
+            floatingLabelText="Password"
+            type="password"
+            onChange={this.getPassword}
+          />
+          <br /><br />
+          <RaisedButton
+            type="submit"
+            label="Login"
+            secondary={true}
+            onClick={this.handleSubmit}
+          />
+          <br /><br />
+          {this.state.wait && <CircularProgress size={60} thickness={5} className="progress-bar"/> }
+
           <p className="error-msg">{this.state.error}</p>
-        </div>
+        </form>
       );
     }
   }
