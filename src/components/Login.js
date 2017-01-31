@@ -14,6 +14,7 @@ export default class Login extends Component {
     this.getLogin = this.getLogin.bind(this);
     this.getPassword = this.getPassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.logout = this.logout.bind(this);
 
     this.state = {
       login: '',
@@ -45,6 +46,14 @@ export default class Login extends Component {
     });
   }
 
+  logout() {
+    firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+    }, () => {
+      // An error happened.
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     this.setState({
@@ -54,7 +63,7 @@ export default class Login extends Component {
       .then(response => {
         // console.log('Response: ', response);
         this.setState({
-          error: 'Success!',
+          error: '',
           logged: true,
           wait: false
         });
@@ -79,7 +88,7 @@ export default class Login extends Component {
     }
     else if (this.state.logged) {
       return (
-        <MainPage />
+        <MainPage myLogout={this.logout}/>
       );
     }
     else {
