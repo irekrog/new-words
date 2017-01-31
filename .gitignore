@@ -1,0 +1,13 @@
+/node_modules
+bundle.js
+npm-debug.log
+/style
+/src/config
+
+
+# IntelliJ
+*.iml
+/.idea
+
+# yarn
+yarn-error.log
