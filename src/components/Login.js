@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import Register from './Register';
 
 import configuration from '../config/config';
 
@@ -20,13 +21,15 @@ export default class Login extends Component {
     this.getPassword = this.getPassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.logout = this.logout.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
 
     this.state = {
       login: '',
       password: '',
       error: '',
       logged: false,
-      wait: true
+      wait: true,
+      createAccount: false
     };
   }
 
@@ -84,8 +87,20 @@ export default class Login extends Component {
       });
   }
 
+  handleRegister(e) {
+    e.preventDefault();
+    this.setState({
+      createAccount: true
+    });
+  }
+
   render() {
-    if (this.state.logged) {
+    if (this.state.createAccount) {
+      return (
+        <Register />
+      );
+    }
+    else if (this.state.logged) {
       return (
         <MainPage myLogout={this.logout}/>
       );
@@ -113,6 +128,7 @@ export default class Login extends Component {
             onClick={this.handleSubmit}
           />
           <br /><br />
+          <p>Don't have an account?<button onClick={this.handleRegister}>Sign up</button></p>
           {this.state.wait && <CircularProgress size={60} thickness={5} className="progress-bar"/> }
 
           <p className="error-msg">{this.state.error}</p>
