@@ -68,7 +68,8 @@ export default class Register extends Component {
     }
     else {
       this.setState({
-        error: 'Check passwords'
+        error: 'Passwords do not match',
+        wait: false
       });
     }
   }

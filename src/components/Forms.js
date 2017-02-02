@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import Register from './Register';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 import configuration from '../config/config';
 
@@ -12,7 +13,7 @@ import '../sass/form.sass';
 
 firebase.initializeApp(configuration);
 
-export default class Login extends Component {
+export default class Forms extends Component {
 
   constructor(props) {
     super(props);
@@ -56,9 +57,7 @@ export default class Login extends Component {
 
   logout() {
     firebase.auth().signOut().then(() => {
-      // Sign-out successful.
     }, () => {
-      // An error happened.
     });
   }
 
@@ -107,32 +106,39 @@ export default class Login extends Component {
     }
     else {
       return (
-        <form className="login-form">
-          <TextField
-            hintText="Enter your e-mail"
-            floatingLabelText="E-mail"
-            onChange={this.getLogin}
-          />
-          <br />
-          <TextField
-            hintText="Enter your password"
-            floatingLabelText="Password"
-            type="password"
-            onChange={this.getPassword}
-          />
-          <br /><br />
-          <RaisedButton
-            type="submit"
-            label="Login"
-            secondary={true}
-            onClick={this.handleSubmit}
-          />
-          <br /><br />
-          <p>Don't have an account?<button onClick={this.handleRegister}>Sign up</button></p>
-          {this.state.wait && <CircularProgress size={60} thickness={5} className="progress-bar"/> }
+        <Tabs>
+          <Tab label="Sign in">
+            <form className="login-form">
+              <TextField
+                hintText="Enter your e-mail"
+                floatingLabelText="E-mail"
+                onChange={this.getLogin}
+              />
+              <br />
+              <TextField
+                hintText="Enter your password"
+                floatingLabelText="Password"
+                type="password"
+                onChange={this.getPassword}
+              />
+              <br /><br />
+              <RaisedButton
+                type="submit"
+                label="Login"
+                secondary={true}
+                onClick={this.handleSubmit}
+              />
+              <br />
+              {this.state.wait && <CircularProgress size={60} thickness={5} className="progress-bar"/> }
 
-          <p className="error-msg">{this.state.error}</p>
-        </form>
+              <p className="error-msg">{this.state.error}</p>
+            </form>
+          </Tab>
+          <Tab label="Sign up">
+            <Register/>
+          </Tab>
+        </Tabs>
+
       );
     }
   }
