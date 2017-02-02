@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import Register from './Register';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import SwipeableViews from 'react-swipeable-views';
 
 import configuration from '../config/config';
 
@@ -22,7 +23,6 @@ export default class Forms extends Component {
     this.getPassword = this.getPassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.logout = this.logout.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
 
     this.state = {
       login: '',
@@ -30,7 +30,8 @@ export default class Forms extends Component {
       error: '',
       logged: false,
       wait: true,
-      createAccount: false
+      createAccount: false,
+      slideIndex: 0
     };
   }
 
@@ -86,12 +87,11 @@ export default class Forms extends Component {
       });
   }
 
-  handleRegister(e) {
-    e.preventDefault();
+  handleChange = (value) => {
     this.setState({
-      createAccount: true
+      slideIndex: value,
     });
-  }
+  };
 
   render() {
     if (this.state.createAccount) {
@@ -106,38 +106,57 @@ export default class Forms extends Component {
     }
     else {
       return (
-        <Tabs>
-          <Tab label="Sign in">
-            <form className="login-form">
-              <TextField
-                hintText="Enter your e-mail"
-                floatingLabelText="E-mail"
-                onChange={this.getLogin}
-              />
-              <br />
-              <TextField
-                hintText="Enter your password"
-                floatingLabelText="Password"
-                type="password"
-                onChange={this.getPassword}
-              />
-              <br /><br />
-              <RaisedButton
-                type="submit"
-                label="Login"
-                secondary={true}
-                onClick={this.handleSubmit}
-              />
-              <br />
-              {this.state.wait && <CircularProgress size={60} thickness={5} className="progress-bar"/> }
+        <div>
+          <Tabs
+            onChange={this.handleChange}
+            value={this.state.slideIndex}>
+            <Tab
+              label="Sign in"
+              value={0}>
 
-              <p className="error-msg">{this.state.error}</p>
-            </form>
-          </Tab>
-          <Tab label="Sign up">
-            <Register/>
-          </Tab>
-        </Tabs>
+            </Tab>
+            <Tab
+              label="Sign up"
+              value={1}>
+
+            </Tab>
+          </Tabs>
+          <SwipeableViews
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleChange}
+          >
+            <div>
+              <form className="login-form">
+                <TextField
+                  hintText="Enter your e-mail"
+                  floatingLabelText="E-mail"
+                  onChange={this.getLogin}
+                />
+                <br />
+                <TextField
+                  hintText="Enter your password"
+                  floatingLabelText="Password"
+                  type="password"
+                  onChange={this.getPassword}
+                />
+                <br /><br />
+                <RaisedButton
+                  type="submit"
+                  label="Login"
+                  secondary={true}
+                  onClick={this.handleSubmit}
+                />
+                <br /><br />
+                {this.state.wait && <CircularProgress size={60} thickness={5} className="progress-bar"/> }
+
+                <p className="error-msg">{this.state.error}</p>
+              </form>
+            </div>
+            <div>
+              <Register/>
+            </div>
+          </SwipeableViews>
+        </div>
 
       );
     }
