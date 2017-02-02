@@ -6,7 +6,8 @@
   "repository": "git@github.com:irekrog/new-words.git",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --inline",
-    "build": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js -p --progress --colors --inline"
+    "build": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js -p --progress --colors --inline",
+    "deploy": "firebase deploy"
   },
   "author": "Irek Rog (@irekrog)",
   "license": "MIT",
@@ -27,6 +28,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "json-loader": "^0.5.4",
     "node-sass": "^4.3.0",
+    "path": "^0.12.7",
     "react-addons-test-utils": "^15.4.2",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",

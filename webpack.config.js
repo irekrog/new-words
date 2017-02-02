@@ -1,13 +1,16 @@
 const webpack = require('webpack');
+const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const DEBUG = process.env.NODE_ENV !== 'production';
 
+const srcPath = path.join(__dirname, 'src');
+const buildPath = path.join(__dirname, 'dist');
+
 module.exports = {
-  entry: './src/index.js',
+  entry: path.join(srcPath, 'index.js'),
   output: {
-    path: __dirname,
-    publicPath: '/',
+    path: buildPath,
     filename: 'bundle.js'
   },
   module: {
@@ -42,7 +45,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-    new ExtractTextPlugin('./style/style.css', {
+    new ExtractTextPlugin('/style/style.css', {
       allChunks: true
     })
   ],
