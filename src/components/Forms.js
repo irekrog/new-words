@@ -1,18 +1,14 @@
 import React, {Component} from 'react';
 import MainPage from './MainPage';
-import * as firebase from 'firebase';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import Register from './Register';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
-
-import configuration from '../config/config';
+import * as firebase from 'firebase';
 
 import '../sass/form.sass';
-
-firebase.initializeApp(configuration);
 
 export default class Forms extends Component {
 

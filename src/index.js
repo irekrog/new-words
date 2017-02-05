@@ -6,6 +6,9 @@ import {indigo500, indigo700, grey400} from 'material-ui/styles/colors';
 import Login from './components/Forms';
 import AppBar from 'material-ui/AppBar';
 
+import * as firebase from 'firebase';
+import configuration from './config/config';
+
 import './sass/main.sass';
 
 const injectTapEventPlugin = require('react-tap-event-plugin');
@@ -18,6 +21,8 @@ const muiTheme = getMuiTheme({
     primary3Color: grey400
   }
 });
+
+firebase.initializeApp(configuration);
 
 const App = () => (
   <MuiThemeProvider muiTheme={muiTheme}>

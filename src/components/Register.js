@@ -20,10 +20,17 @@ export default class Register extends Component {
       wait: false
     };
 
+    this.getUsername = this.getUsername.bind(this);
     this.getEmail = this.getEmail.bind(this);
     this.getPassword = this.getPassword.bind(this);
     this.getRepeatPassword = this.getRepeatPassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  getUsername(e) {
+    this.setState({
+      username: e.target.value
+    });
   }
 
   getEmail(e) {
@@ -50,12 +57,22 @@ export default class Register extends Component {
       wait: true,
       error: ''
     });
-    if (this.state.password === this.state.repeatPassword) {
+    if (!this.state.username) {
+      this.setState({
+        error: 'Enter your username.',
+        wait: false
+      });
+    }
+    else if (this.state.password === this.state.repeatPassword) {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => {
+        .then((response) => {
           this.setState({
             logged: true,
             wait: false
+          });
+          firebase.database().ref('users/' + response.uid).set({
+            username: this.state.username,
+            email: this.state.email
           });
         })
         .catch(error => {
@@ -66,9 +83,10 @@ export default class Register extends Component {
           });
         });
     }
+
     else {
       this.setState({
-        error: 'Passwords do not match',
+        error: 'Passwords do not match.',
         wait: false
       });
     }
@@ -83,6 +101,12 @@ export default class Register extends Component {
     else {
       return (
         <form className="login-form">
+          <TextField
+            hintText="Enter your username"
+            floatingLabelText="Username"
+            onChange={this.getUsername}
+          />
+          <br />
           <TextField
             hintText="Enter your e-mail"
             floatingLabelText="E-mail"
