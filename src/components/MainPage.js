@@ -4,6 +4,8 @@ import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class MainPage extends Component {
 
@@ -80,10 +82,16 @@ export default class MainPage extends Component {
             docked={false}
             onRequestChange={(open) => this.setState({open})}
           >
+            <MenuItem>Test</MenuItem>
             <MenuItem onTouchTap={this.props.myLogout}>Logout</MenuItem>
           </Drawer>
           <div className="main-container">
-            <p>You're logged in</p>
+            <TextField
+              hintText="Enter a word"
+              fullWidth={true}
+            />
+            <RaisedButton label="Add" secondary={true}/>
+
           </div>
         </div>
       );
