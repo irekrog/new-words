@@ -7,6 +7,7 @@ import Register from './Register';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import * as firebase from 'firebase';
+import AppBar from 'material-ui/AppBar';
 
 import '../sass/form.sass';
 
@@ -25,17 +26,20 @@ export default class Forms extends Component {
       password: '',
       error: '',
       logged: false,
-      wait: true,
-      createAccount: false,
-      slideIndex: 0
+      wait: false,
+      slideIndex: 0,
+      firstScreen: true
     };
+
+    this.checkLoggedUser();
   }
 
-  componentWillMount() {
+  checkLoggedUser() {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({
         logged: Boolean(user),
-        wait: false
+        wait: false,
+        firstScreen: false
       });
     });
   }
@@ -66,7 +70,6 @@ export default class Forms extends Component {
     });
     firebase.auth().signInWithEmailAndPassword(this.state.login, this.state.password)
       .then(() => {
-        // console.log('Response: ', response);
         this.setState({
           error: '',
           logged: true,
@@ -74,7 +77,6 @@ export default class Forms extends Component {
         });
       })
       .catch(error => {
-        // console.log('Error: ', error);
         this.setState({
           error: error.message,
           logged: false,
@@ -90,10 +92,15 @@ export default class Forms extends Component {
   };
 
   render() {
-    if (this.state.createAccount) {
+    if (this.state.firstScreen) {
       return (
-        <Register />
-      );
+        <AppBar
+          title='Loading...'
+          titleStyle={{
+            fontWeight: 300
+          }}
+        />
+      )
     }
     else if (this.state.logged) {
       return (
@@ -103,6 +110,13 @@ export default class Forms extends Component {
     else {
       return (
         <div>
+          <AppBar
+            title="Hello"
+            iconClassNameRight="muidocs-icon-navigation-expand-more"
+            titleStyle={{
+              fontWeight: 300
+            }}
+          />
           <Tabs
             onChange={this.handleChange}
             value={this.state.slideIndex}>
