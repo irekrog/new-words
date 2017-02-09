@@ -122,14 +122,10 @@ export default class Forms extends Component {
             value={this.state.slideIndex}>
             <Tab
               label="Sign in"
-              value={0}>
-
-            </Tab>
+              value={0} />
             <Tab
               label="Sign up"
-              value={1}>
-
-            </Tab>
+              value={1} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}

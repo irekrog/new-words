@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import * as firebase from 'firebase';
 import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class MainPage extends Component {
 
@@ -10,10 +12,14 @@ export default class MainPage extends Component {
 
     this.state = {
       username: '',
-      wait: true
+      wait: true,
+      open: false
     };
 
     this.getUsername();
+
+    this.openDrawer = this.openDrawer.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
   }
 
   getUsername() {
@@ -30,6 +36,18 @@ export default class MainPage extends Component {
     });
   }
 
+  openDrawer() {
+    this.setState({
+      open: !this.state.open
+    });
+  }
+
+  closeDrawer() {
+    this.setState({
+      open: false
+    });
+  }
+
   render() {
     if (this.state.wait) {
       return (
@@ -41,7 +59,6 @@ export default class MainPage extends Component {
             }}
           />
           <div style={{textAlign: 'center'}}>
-
             <CircularProgress size={60} thickness={5}/>
           </div>
         </div>
@@ -56,10 +73,17 @@ export default class MainPage extends Component {
             titleStyle={{
               fontWeight: 300
             }}
+            onLeftIconButtonTouchTap={this.openDrawer}
           />
+          <Drawer
+            open={this.state.open}
+            docked={false}
+            onRequestChange={(open) => this.setState({open})}
+          >
+            <MenuItem onTouchTap={this.props.myLogout}>Logout</MenuItem>
+          </Drawer>
           <div className="main-container">
             <p>You're logged in</p>
-            <button onClick={this.props.myLogout}>Logout</button>
           </div>
         </div>
       );
