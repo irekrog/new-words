@@ -19,6 +19,7 @@ export default class Forms extends Component {
     this.getLogin = this.getLogin.bind(this);
     this.getPassword = this.getPassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.logout = this.logout.bind(this);
 
     this.state = {
@@ -85,11 +86,11 @@ export default class Forms extends Component {
       });
   }
 
-  handleChange = (value) => {
+  handleChange(value) {
     this.setState({
-      slideIndex: value,
+      slideIndex: value
     });
-  };
+  }
 
   render() {
     if (this.state.firstScreen) {
@@ -100,7 +101,7 @@ export default class Forms extends Component {
             fontWeight: 300
           }}
         />
-      )
+      );
     }
     else if (this.state.logged) {
       return (
@@ -122,10 +123,10 @@ export default class Forms extends Component {
             value={this.state.slideIndex}>
             <Tab
               label="Sign in"
-              value={0} />
+              value={0}/>
             <Tab
               label="Sign up"
-              value={1} />
+              value={1}/>
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}

@@ -6,6 +6,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import WordItem from './WordItem';
 
 export default class MainPage extends Component {
 
@@ -15,13 +16,19 @@ export default class MainPage extends Component {
     this.state = {
       username: '',
       wait: true,
-      open: false
+      open: false,
+      word: '',
+      definition: '',
+      userId: ''
     };
 
     this.getUsername();
 
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
+    this.addWord = this.addWord.bind(this);
+    this.getWord = this.getWord.bind(this);
+    this.getDefinition = this.getDefinition.bind(this);
   }
 
   getUsername() {
@@ -31,10 +38,20 @@ export default class MainPage extends Component {
       const obj = snapshot.val()[userId];
       this.setState({
         username: obj.username,
-        wait: false
+        wait: false,
+        userId
       });
     }).catch(error => {
       console.log('error', error);
+    });
+  }
+
+  addWord() {
+    const userId = firebase.auth().currentUser.uid;
+
+    firebase.database().ref(`users/${userId}/words`).push({
+      word: this.state.word,
+      definition: this.state.definition
     });
   }
 
@@ -47,6 +64,18 @@ export default class MainPage extends Component {
   closeDrawer() {
     this.setState({
       open: false
+    });
+  }
+
+  getWord(e) {
+    this.setState({
+      word: e.target.value
+    });
+  }
+
+  getDefinition(e) {
+    this.setState({
+      definition: e.target.value
     });
   }
 
@@ -87,12 +116,21 @@ export default class MainPage extends Component {
           </Drawer>
           <div className="main-container">
             <TextField
-              hintText="Enter a word"
+              hintText="Enter a new word"
               fullWidth={true}
+              onChange={this.getWord}
             />
-            <RaisedButton label="Add" secondary={true}/>
-
+            <TextField
+              hintText="Enter a word definition"
+              fullWidth={true}
+              onChange={this.getDefinition}
+            />
+            <RaisedButton
+              label="Add"
+              secondary={true}
+              onClick={this.addWord}/>
           </div>
+          <WordItem userId={this.state.userId}/>
         </div>
       );
     }

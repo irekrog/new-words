@@ -70,7 +70,7 @@ export default class Register extends Component {
             logged: true,
             wait: false
           });
-          firebase.database().ref('users/' + response.uid).set({
+          firebase.database().ref(`users/'${response.uid}`).set({
             username: this.state.username,
             email: this.state.email
           });
