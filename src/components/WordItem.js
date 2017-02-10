@@ -14,33 +14,47 @@ export default class WordItem extends Component {
     this.state = {
       listData: []
     };
+  }
 
+  componentDidMount() {
     this.getItems();
   }
 
   getItems() {
     const words = firebase.database().ref(`users/${this.props.userId}/words`);
-    words.on('child_added', snapshot => {
-      console.log(snapshot.val());
-      this.setState(previousState => ({
-        listData: [...previousState.listData, snapshot.val()]
-      }));
+
+    words.on('value', snapshot => {
+      this.setState({
+        listData: []
+      });
+      snapshot.forEach((messageSnapshot) => {
+        const snapshotObj = messageSnapshot.val();
+        snapshotObj.key = messageSnapshot.key;
+        this.setState(previousState => ({
+          listData: [...previousState.listData, snapshotObj]
+        }));
+      });
     });
+  }
+
+  removeItem(itemKey) {
+    const word = firebase.database().ref(`users/${this.props.userId}/words/${itemKey}`);
+    word.remove();
   }
 
   render() {
     const iconButtonElement = (
-      <IconButton
-        touch={true}
-      >
-        <MoreVertIcon color={grey400} />
+      <IconButton touch={true}>
+        <MoreVertIcon color={grey400}/>
       </IconButton>
     );
 
-    const rightIconMenu = (
+    const rightIconMenu = (key) => (
       <IconMenu iconButtonElement={iconButtonElement}>
         <MenuItem>Edit</MenuItem>
-        <MenuItem>Delete</MenuItem>
+        <MenuItem onTouchTap={() => {
+          this.removeItem(key);
+        }}>Delete</MenuItem>
       </IconMenu>
     );
 
@@ -50,10 +64,12 @@ export default class WordItem extends Component {
           <ListItem
             primaryText={item.word}
             secondaryText={item.definition}
-            rightIconButton={rightIconMenu}
+            rightIconButton={rightIconMenu(item.key)}
+            id={item.key}
           />
         );
       });
+
     return (
       <List>{items}</List>
     );
