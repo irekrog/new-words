@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin');
 
 const DEBUG = process.env.NODE_ENV !== 'production';
 
@@ -47,6 +48,9 @@ module.exports = {
     }),
     new ExtractTextPlugin('/style/style.css', {
       allChunks: true
+    }),
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, './service-worker.js')
     })
   ],
   devServer: {

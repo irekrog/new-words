@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {indigo500, indigo700, grey400} from 'material-ui/styles/colors';
 import Login from './components/Forms';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
 import * as firebase from 'firebase';
 import configuration from './config/config';
@@ -22,6 +23,11 @@ const muiTheme = getMuiTheme({
 });
 
 firebase.initializeApp(configuration);
+
+if ('serviceWorker' in navigator) {
+  const registration = runtime.register();
+  console.log('Service Worker Registered');
+}
 
 const App = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
