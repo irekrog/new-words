@@ -6,6 +6,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 import WordItem from './WordItem';
 
 export default class MainPage extends Component {
@@ -19,7 +20,8 @@ export default class MainPage extends Component {
       open: false,
       word: '',
       definition: '',
-      userId: ''
+      userId: '',
+      snackbarOpen: false
     };
 
     this.getUsername();
@@ -49,10 +51,14 @@ export default class MainPage extends Component {
   addWord() {
     const userId = firebase.auth().currentUser.uid;
 
-    firebase.database().ref(`users/${userId}/words`).push({
-      word: this.state.word,
-      definition: this.state.definition
-    });
+    firebase.database().ref(`users/${userId}/words`)
+      .push({
+        word: this.state.word,
+        definition: this.state.definition
+      },
+      this.setState({
+        snackbarOpen: true
+      }));
   }
 
   openDrawer() {
@@ -130,7 +136,13 @@ export default class MainPage extends Component {
               secondary={true}
               onClick={this.addWord}/>
           </div>
-          <WordItem userId={this.state.userId}/>
+          <WordItem userId={this.state.userId} />
+          <Snackbar
+            open={this.state.snackbarOpen}
+            message="Word added to your library"
+            autoHideDuration={3000}
+            onRequestClose={() => { this.setState({snackbarOpen: false}); }}
+          />
         </div>
       );
     }
