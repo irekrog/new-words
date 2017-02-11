@@ -21,7 +21,8 @@ export default class MainPage extends Component {
       word: '',
       definition: '',
       userId: '',
-      snackbarOpen: false
+      snackbarOpen: false,
+      buttonActive: false
     };
 
     this.getUsername();
@@ -77,6 +78,7 @@ export default class MainPage extends Component {
     this.setState({
       word: e.target.value
     });
+    e.target.value ? this.setState({buttonActive: true}) : this.setState({buttonActive: false});
   }
 
   getDefinition(e) {
@@ -134,7 +136,9 @@ export default class MainPage extends Component {
             <RaisedButton
               label="Add"
               secondary={true}
-              onClick={this.addWord}/>
+              onClick={this.addWord}
+              disabled={!this.state.buttonActive}
+            />
           </div>
           <WordItem userId={this.state.userId} />
           <Snackbar
