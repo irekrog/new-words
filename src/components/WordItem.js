@@ -19,20 +19,17 @@ export default class WordItem extends Component {
     super(props);
     this.state = {
       listData: [],
-      itemKeyEdit: '',
       openEdit: false,
-      wordEdit: '',
-      definitionEdit: ''
+      itemKeyEdit: '',
+      editedWord: '',
+      editedDefinition: ''
     };
 
     this.getEditWord = this.getEditWord.bind(this);
     this.getEditDefinition = this.getEditDefinition.bind(this);
+    this.confirmEditItem = this.confirmEditItem.bind(this);
 
     this.getItems();
-  }
-
-  componentDidMount() {
-
   }
 
   getItems() {
@@ -57,24 +54,36 @@ export default class WordItem extends Component {
     word.remove();
   }
 
-  editItem(itemKeyEdit, editWord, editDefinition) {
+  editItemDialog(itemKeyEdit, editedWord, editedDefinition) {
     this.setState({
       openEdit: true,
       itemKeyEdit,
-      editWord,
-      editDefinition
+      editedWord,
+      editedDefinition
+    });
+  }
+
+  confirmEditItem() {
+    this.setState({openEdit: false});
+
+    const item = firebase.database().ref(`users/${this.props.userId}/words/${this.state.itemKeyEdit}`);
+    item.once('value', snapshot => {
+      snapshot.ref.update({
+        word: this.state.editedWord,
+        definition: this.state.editedDefinition
+      });
     });
   }
 
   getEditWord(e) {
     this.setState({
-      editWord: e.target.value
+      editedWord: e.target.value
     });
   }
 
   getEditDefinition(e) {
     this.setState({
-      editDefinition: e.target.value
+      editedDefinition: e.target.value
     });
   }
 
@@ -88,7 +97,7 @@ export default class WordItem extends Component {
       <RaisedButton
         label="Save"
         secondary={true}
-        onTouchTap={() => { this.setState({openEdit: false}); }}
+        onTouchTap={this.confirmEditItem}
       />
     ];
 
@@ -101,7 +110,7 @@ export default class WordItem extends Component {
     const rightIconMenu = (key, word, definition) => (
       <IconMenu iconButtonElement={iconButtonElement}>
         <MenuItem onTouchTap={() => {
-          this.editItem(key, word, definition);
+          this.editItemDialog(key, word, definition);
         }}>Edit</MenuItem>
         <MenuItem onTouchTap={() => {
           this.removeItem(key);
@@ -135,14 +144,14 @@ export default class WordItem extends Component {
           <TextField
             hintText="Edit your word"
             onChange={this.getEditWord}
-            value={this.state.editWord}
+            value={this.state.editedWord}
             fullWidth={true}
           />
           <br />
           <TextField
             hintText="Enter your definition"
             onChange={this.getEditDefinition}
-            value={this.state.editDefinition}
+            value={this.state.editedDefinition}
             fullWidth={true}
           />
         </Dialog>
