@@ -19,6 +19,7 @@ export default class WordItem extends Component {
     super(props);
     this.state = {
       listData: [],
+      itemKeyEdit: '',
       openEdit: false,
       wordEdit: '',
       definitionEdit: ''
@@ -56,13 +57,13 @@ export default class WordItem extends Component {
     word.remove();
   }
 
-  editItem(itemKey, editWord, editDefinition) {
+  editItem(itemKeyEdit, editWord, editDefinition) {
     this.setState({
       openEdit: true,
+      itemKeyEdit,
       editWord,
       editDefinition
     });
-    console.log(itemKey);
   }
 
   getEditWord(e) {
